@@ -1,4 +1,3 @@
-import numpy as np
 import os
 import argparse
 import pandas as pd
@@ -9,6 +8,7 @@ from datetime import date
 from os import environ
 from pathlib import Path
 from pandas.plotting import register_matplotlib_converters
+
 
 def plot_nyt_covid_data(state):
     # Read in data from csv and get needed parameters
@@ -27,7 +27,7 @@ def plot_nyt_covid_data(state):
     earliest_date = df.iloc[0][0]
     latest_date = df.iloc[-1][0]
     print(f'Data current as of {latest_date}', flush=True)
-    
+
     # Plot data
     register_matplotlib_converters()
     fig, ax = plt.subplots(figsize=(8, 8))
@@ -37,7 +37,7 @@ def plot_nyt_covid_data(state):
     ax.scatter(df['date'], df['cases'], color='tab:red')
     ax.text(0.2, 0.95, f'Data current as of {latest_date}',
             horizontalalignment='center',
-            fontsize=8, transform=ax.transAxes, 
+            fontsize=8, transform=ax.transAxes,
             color='black')
     plt.grid(axis='y')
 
@@ -46,7 +46,7 @@ def plot_nyt_covid_data(state):
            ylabel="Number of Cases",
            title=f"Total Number of Confirmed COVID-19 Cases in {state}")
     ax.set_xlim(left=earliest_date, right=latest_date)
-    
+
     # Save the plots to file. If state with two words replace spaces
     state = state.replace(' ', '_')
     save_dir = Path(environ['HOME'], f'covid/images/{today}/')
@@ -54,6 +54,7 @@ def plot_nyt_covid_data(state):
         os.mkdir(save_dir)
     plt.savefig(str(save_dir) + f'/{state}.png')
     print(f'Writing: {save_dir}' + f'/{state}.png', flush=True)
+
 
 if __name__ == '__main__':
     try:
@@ -66,4 +67,4 @@ if __name__ == '__main__':
         state = state.replace('_', ' ')
         plot_nyt_covid_data(state)
     except KeyError:
-       print('Invalid state name given')
+        print('Invalid state name given')
